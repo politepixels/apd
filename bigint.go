@@ -326,6 +326,9 @@ func addInline(xVal, yVal uint64, xNeg, yNeg bool) (zVal uint64, zNeg, ok bool) 
 func mulInline(xVal, yVal uint64, xNeg, yNeg bool) (zVal uint64, zNeg, ok bool) {
 	hi, lo := bits.Mul64(xVal, yVal)
 	neg := xNeg != yNeg
+	if lo == 0 {
+		neg = false
+	}
 	overflow := hi != 0
 	return lo, neg, !overflow
 }
@@ -337,6 +340,9 @@ func quoInline(xVal, yVal uint64, xNeg, yNeg bool) (quoVal uint64, quoNeg, ok bo
 	}
 	quo := xVal / yVal
 	neg := xNeg != yNeg
+	if quo == 0 {
+		neg = false
+	}
 	return quo, neg, true
 }
 
@@ -346,6 +352,9 @@ func remInline(xVal, yVal uint64, xNeg, yNeg bool) (remVal uint64, remNeg, ok bo
 		return 0, false, false
 	}
 	rem := xVal % yVal
+	if rem == 0 {
+		xNeg = false
+	}
 	return rem, xNeg, true
 }
 
